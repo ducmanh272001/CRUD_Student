@@ -34,33 +34,7 @@ public class Test1 {
             int chon = Integer.parseInt(sc.nextLine());
             switch (chon) {
                 case 1:
-                    System.out.println("Nhập name :");
-                    String name = sc.nextLine();
-                    System.out.println("Nhập code : ");
-                    String code = sc.nextLine();
-                    //Check mã code
-                    Validate.checkMaCode(code);
-                    String codecheck = Validate.checkKyTuDacBiet(code);
-                    //////
-                    System.out.println("Nhập phone : ");
-                    String phone = sc.nextLine();
-                    String phonela = Validate.checkPhone(phone);
-                    System.out.println("Nhập địa chỉ : ");
-                    String address = sc.nextLine();
-                    Date create_at = new Date();
-                    Date update_at = new Date();
-                    System.out.println("Nhập tuổi :");
-                    int age = 0;
-                    try {
-                        age = Integer.parseInt(sc.nextLine());
-                        Validate.checkAge(age);
-                    } catch (Exception exception) {
-                        System.out.println("Tuổi không được phép là chuỗi");
-                        System.out.println("Nhập tuổi");
-                        age = Integer.parseInt(sc.nextLine());
-                        Validate.checkAge(age);
-                    }
-                    student students = new student(name, codecheck, phonela, address, create_at, update_at, age);
+                    student students = student.input();
                     implRankLevelsDao.insert(students);
                     break;
                 case 2:
@@ -68,35 +42,16 @@ public class Test1 {
                     int id = Integer.parseInt(sc.nextLine());
                     student studentuk = implRankLevelsDao.selectByID(id);
                     if (studentuk.getName() != null) {
-                        System.out.println("Nhập name :");
-                        String namesua = sc.nextLine();
-                        System.out.println("Nhập code : ");
-                        String codesua = sc.nextLine();
-                        //CHECK KO được trùng CODE
-                        codesua = Validate.checkMaCode(codesua);
-                        codesua = Validate.checkKyTuDacBiet(codesua);
-                        System.out.println("Nhập phone : ");
-                        String phonesua = sc.nextLine();
-                        String phonelas = Validate.checkPhone(phonesua);
-                        System.out.println("Nhập địa chỉ : ");
-                        String addresssua = sc.nextLine();
-                        System.out.println("Nhập tuổi :");
-                        int agesua = Integer.parseInt(sc.nextLine());
-                        try {
-                            Validate.checkAge(agesua);
-                        } catch (Exception exception) {
-                            System.out.println("Tuổi ko được phép là chuỗi");
-                        }
-                        Date create_at_sua = new Date();
-                        Date update_at_sua = new Date();
-                        studentuk.setName(namesua);
-                        studentuk.setCode(codesua);
-                        studentuk.setPhone(phonelas);
-                        studentuk.setAddress(addresssua);
-                        studentuk.setCreate_at(create_at_sua);
-                        studentuk.setUpdate_at(update_at_sua);
-                        studentuk.setAge(agesua);
+                        student studentsua = student.input();
+                        studentuk.setName(studentsua.getName());
+                        studentuk.setCode(studentsua.getCode());
+                        studentuk.setPhone(studentsua.getPhone());
+                        studentuk.setAddress(studentsua.getAddress());
+                        studentuk.setCreate_at(studentsua.getCreate_at());
+                        studentuk.setUpdate_at(studentsua.getUpdate_at());
+                        studentuk.setAge(studentsua.getAge());
                         implRankLevelsDao.update(studentuk);
+                        break;
                     }
                     System.out.println("Không có id trong cơ sở dữ liệu ");
                     break;
@@ -108,6 +63,7 @@ public class Test1 {
                         student studentla = implRankLevelsDao.selectByID(idxoa);
                         if (studentla.getName() != null) {
                             implRankLevelsDao.delete(idxoa);
+                            break;
                         } else {
                             System.out.println("Không có id trong cơ sở dỡ liệu");
                         }
@@ -122,6 +78,7 @@ public class Test1 {
                     student studentla = implRankLevelsDao.selectByID(id_tim);
                     if (studentla.getName() != null) {
                         System.out.println(studentla.toString());
+                        break;
                     } else {
                         System.out.println("Không có id trong cơ sở dỡ liệu");
                     }
@@ -137,6 +94,10 @@ public class Test1 {
                     List<student> listname = implRankLevelsDao.selectByName(name_search);
                     for (student std : listname) {
                         System.out.println(std.toString());
+                        break;
+                    }
+                    if (listname.isEmpty()) {
+                        System.out.println("Không tìm thấy tên bạn muốn tìm");
                     }
                     break;
                 case 7:
@@ -145,6 +106,10 @@ public class Test1 {
                     List<student> listaddress = implRankLevelsDao.selectByAddress(address_search);
                     for (student std : listaddress) {
                         System.out.println(std.toString());
+                        break;
+                    }
+                    if (listaddress.isEmpty()) {
+                        System.out.println("Không tìm thấy địa chỉ bạn muốn tìm");
                     }
                     break;
                 case 8:

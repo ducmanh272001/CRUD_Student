@@ -1,5 +1,7 @@
 package Entities;
 
+import DAO.Validate;
+
 import java.util.Date;
 import java.util.Scanner;
 
@@ -127,19 +129,35 @@ public class student {
         return "student{" + "id=" + id + ", name='" + name + '\'' + ", code='" + code + '\'' + ", phone='" + phone + '\'' + ", address='" + address + '\'' + ", create_at=" + create_at + ", update_at=" + update_at + ", age=" + age + '}';
     }
 
-    public void input(student std) {
+    public static student input() {
         Scanner sc = new Scanner(System.in);
         System.out.println("Nhập name :");
         String name = sc.nextLine();
         System.out.println("Nhập code : ");
         String code = sc.nextLine();
+        //Check mã code
+        Validate.checkMaCode(code);
+        String codecheck = Validate.checkKyTuDacBiet(code);
+        //////
         System.out.println("Nhập phone : ");
         String phone = sc.nextLine();
+        String phonela = Validate.checkPhone(phone);
         System.out.println("Nhập địa chỉ : ");
         String address = sc.nextLine();
         Date create_at = new Date();
         Date update_at = new Date();
         System.out.println("Nhập tuổi :");
-        int age = Integer.parseInt(sc.nextLine());
+        int age = 0;
+        try {
+            age = Integer.parseInt(sc.nextLine());
+            Validate.checkAge(age);
+        } catch (Exception exception) {
+            System.out.println("Tuổi không được phép là chuỗi");
+            System.out.println("Nhập tuổi");
+            age = Integer.parseInt(sc.nextLine());
+            Validate.checkAge(age);
+        }
+        student students = new student(name, codecheck, phonela, address, create_at, update_at, age);
+        return students;
     }
 }

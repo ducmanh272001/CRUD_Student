@@ -133,9 +133,6 @@ public class ImplRankLevelsDao implements IRankLevelsDao {
 //            rank_levels rankLevels = new rank_levels();
             LuuTru luuTru = new LuuTru();
             List<student> list = luuTru.listThu(resultSet);
-            if (list.size() == 0) {
-                System.out.println("Không tìm thấy kết quả");
-            }
             return list;
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
@@ -153,9 +150,6 @@ public class ImplRankLevelsDao implements IRankLevelsDao {
             ResultSet resultSet = statement.executeQuery();
             LuuTru luuTru = new LuuTru();
             List<student> listok = luuTru.listThu(resultSet);
-            if (listok.size() == 0) {
-                System.out.println("Không tìm thấy kết quả");
-            }
             return listok;
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
