@@ -115,7 +115,6 @@ public class LuuTru {
                 studentget.setCreate_at(resultSet.getDate("created_at"));
                 studentget.setUpdate_at(resultSet.getDate("update_at"));
                 studentget.setAge(resultSet.getInt("age"));
-                System.out.println("Cái lol");
             }
         } catch (Exception exception) {
             System.out.println("Lỗi xem lại");
