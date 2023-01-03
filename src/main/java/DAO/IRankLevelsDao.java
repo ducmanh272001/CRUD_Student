@@ -1,32 +1,34 @@
 package DAO;
 
 
-import Entities.student;
+import Entities.Student;
 
 import java.sql.SQLException;
 import java.util.List;
 
 public interface IRankLevelsDao {
-    public List<student> selectAll() throws SQLException;
+    public List<Student> selectAll() throws SQLException;
 
-    public Boolean insert(student rl);
+    public Boolean insert(Student rl);
 
-    public Boolean update(student rl);
+    public Boolean update(Student rl);
 
     public Boolean delete(int idxoa);
 
-    public student selectByID(int idtim);
+    public Student selectByID(int idtim);
 
-    public student selectByCode(String macode);
+    public Student selectByCode(String macode);
 
-    public List<student> selectByName(String name);
+    public List<Student> selectByName(String name);
 
-    public List<student> selectByAddress(String address);
+    public List<Student> selectByAddress(String address);
 
-    public List<student> increaserAge();
+    public List<Student> increaserAge();
 
-    public List<student> decreaserAge();
+    public List<Student> decreaserAge();
 
-    public List<student> selectByNameOrByAddress(String str);
+    public List<Student> selectByNameOrByAddress(String str);
 
+
+    public List<Student> selectDeletedAll();
 }

@@ -1,12 +1,10 @@
 package Test;
 
 import DAO.ImplRankLevelsDao;
-import DAO.Validate;
-import Entities.student;
+import Entities.Student;
 
 import java.sql.SQLException;
 import java.text.ParseException;
-import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
@@ -28,21 +26,22 @@ public class Test1 {
             System.out.println("9. Tăng dần theo tuổi");
             System.out.println("10. Giảm dần theo tuổi");
             System.out.println("11. Tìm kiếm theo name và address");
-            System.out.println("12. Thoát khỏi chương trình");
-            List<student> list = implRankLevelsDao.selectAll();
+            System.out.println("12. Xem các cơ sở dữ liệu đã xóa");
+            System.out.println("13. Thoát khỏi chương trình");
+            List<Student> list = implRankLevelsDao.selectAll();
             Scanner sc = new Scanner(System.in);
             int chon = Integer.parseInt(sc.nextLine());
             switch (chon) {
                 case 1:
-                    student students = student.input();
+                    Student students = Student.input();
                     implRankLevelsDao.insert(students);
                     break;
                 case 2:
                     System.out.println("Nhập id bạn muốn sửa");
                     int id = Integer.parseInt(sc.nextLine());
-                    student studentuk = implRankLevelsDao.selectByID(id);
-                    if (studentuk.getName() != null) {
-                        student studentsua = student.input();
+                    Student studentuk = implRankLevelsDao.selectByID(id);
+                    if (studentuk != null) {
+                        Student studentsua = Student.input();
                         studentuk.setName(studentsua.getName());
                         studentuk.setCode(studentsua.getCode());
                         studentuk.setPhone(studentsua.getPhone());
@@ -60,8 +59,9 @@ public class Test1 {
                     int idxoa = Integer.parseInt(sc.nextLine());
                     // find sql heo id
                     try {
-                        student studentla = implRankLevelsDao.selectByID(idxoa);
+                        Student studentla = implRankLevelsDao.selectByID(idxoa);
                         if (studentla.getName() != null) {
+                            //Nếu mà có thì cập nhâp lại ngày xóa
                             implRankLevelsDao.delete(idxoa);
                             break;
                         } else {
@@ -75,8 +75,8 @@ public class Test1 {
                 case 4:
                     System.out.println("Nhập id bạn muốn tìm : ");
                     int id_tim = Integer.parseInt(sc.nextLine());
-                    student studentla = implRankLevelsDao.selectByID(id_tim);
-                    if (studentla.getName() != null) {
+                    Student studentla = implRankLevelsDao.selectByID(id_tim);
+                    if (studentla != null) {
                         System.out.println(studentla.toString());
                         break;
                     } else {
@@ -84,15 +84,15 @@ public class Test1 {
                     }
                     break;
                 case 5:
-                    for (student std : list) {
+                    for (Student std : list) {
                         System.out.println(std.toString());
                     }
                     break;
                 case 6:
                     System.out.println("Nhập tên bạn muốn tìm");
                     String name_search = sc.nextLine();
-                    List<student> listname = implRankLevelsDao.selectByName(name_search);
-                    for (student std : listname) {
+                    List<Student> listname = implRankLevelsDao.selectByName(name_search);
+                    for (Student std : listname) {
                         System.out.println(std.toString());
                         break;
                     }
@@ -103,8 +103,8 @@ public class Test1 {
                 case 7:
                     System.out.println("Nhập địa chỉ bạn muốn tìm");
                     String address_search = sc.nextLine();
-                    List<student> listaddress = implRankLevelsDao.selectByAddress(address_search);
-                    for (student std : listaddress) {
+                    List<Student> listaddress = implRankLevelsDao.selectByAddress(address_search);
+                    for (Student std : listaddress) {
                         System.out.println(std.toString());
                         break;
                     }
@@ -115,38 +115,44 @@ public class Test1 {
                 case 8:
                     System.out.println("Nhập mã code muốn tìm");
                     String macode = sc.nextLine();
-                    student student = implRankLevelsDao.selectByCode(macode);
-                    if (student.getName() != null) {
+                    Student student = implRankLevelsDao.selectByCode(macode);
+                    if (student != null) {
                         System.out.println(student.toString());
                     } else {
                         System.out.println("Không có mã code bạn tìm");
                     }
                     break;
                 case 9:
-                    List<student> listcreaser = implRankLevelsDao.increaserAge();
-                    for (student stdtang : listcreaser) {
+                    List<Student> listcreaser = implRankLevelsDao.increaserAge();
+                    for (Student stdtang : listcreaser) {
                         System.out.println(stdtang.toString());
                     }
                     break;
                 case 10:
-                    List<student> listgiam = implRankLevelsDao.decreaserAge();
-                    for (student stdgiam : listgiam) {
-                        System.out.println(stdgiam.toString());
+                    List<Student> studentList = implRankLevelsDao.decreaserAge();
+                    for (Student student1 : studentList) {
+                        System.out.println(student1.toString());
                     }
                     break;
                 case 11:
                     System.out.println("Nhập name or address:");
                     String nametim = sc.nextLine();
-                    List<student> list1 = implRankLevelsDao.selectByNameOrByAddress(nametim);
-                    for (student timstd : list1) {
+                    List<Student> list1 = implRankLevelsDao.selectByNameOrByAddress(nametim);
+                    for (Student timstd : list1) {
                         System.out.println(timstd.toString());
                         break;
                     }
-                    if(list1.isEmpty()){
+                    if (list1.isEmpty()) {
                         System.out.println("Không tìm thấy kết quả ?");
                     }
                     break;
                 case 12:
+                    List<Student> list2 = implRankLevelsDao.selectDeletedAll();
+                    for (Student student1 : list2) {
+                        System.out.println(student1.toString());
+                    }
+                    break;
+                case 13:
                     thoat = 12;
             }
         } while (thoat < 11);

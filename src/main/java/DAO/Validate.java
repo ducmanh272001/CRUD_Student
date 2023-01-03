@@ -1,11 +1,7 @@
 package DAO;
 
-import Connection_DB.ConnectionPostgres;
-import Entities.student;
+import Entities.Student;
 
-import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
@@ -18,15 +14,14 @@ public class Validate {
         ImplRankLevelsDao implRankLevelsDao = new ImplRankLevelsDao();
         Scanner sc = new Scanner(System.in);
         while (true) {
-            student student = implRankLevelsDao.selectByCode(code);
-            if (student.getName() == null) {
-                break;
+            Student student = implRankLevelsDao.selectByCode(code);
+            if (student == null) {
+                return code;
             }
             System.out.println("Mã code đã có trong DB : ");
             System.out.println("Nhập code : ");
             code = sc.nextLine();
         }
-        return code;
     }
 
     //Check tuổi

@@ -5,7 +5,7 @@ import DAO.Validate;
 import java.util.Date;
 import java.util.Scanner;
 
-public class student {
+public class Student {
     private int id;
     private String name;
     private String code;
@@ -13,10 +13,11 @@ public class student {
     private String address;
     private Date create_at;
     private Date update_at;
+    private Date deleted_at;
 
     private int age;
 
-    public student(int id, String name, String code, String phone, String address, Date create_at, Date update_at) {
+    public Student(int id, String name, String code, String phone, String address, Date create_at, Date update_at, Date deleted_at) {
         this.id = id;
         this.name = name;
         this.code = code;
@@ -24,9 +25,10 @@ public class student {
         this.address = address;
         this.create_at = create_at;
         this.update_at = update_at;
+        this.deleted_at = deleted_at;
     }
 
-    public student(int id, String name, String code, String phone, String address, Date create_at, Date update_at, int age) {
+    public Student(int id, String name, String code, String phone, String address, Date create_at, Date update_at, int age) {
         this.id = id;
         this.name = name;
         this.code = code;
@@ -37,7 +39,8 @@ public class student {
         this.age = age;
     }
 
-    public student(String name, String code, String phone, String address, Date create_at, Date update_at, int age) {
+    public Student(int id, String name, String code, String phone, String address, Date create_at, Date update_at, int age, Date deleted_at) {
+        this.id = id;
         this.name = name;
         this.code = code;
         this.phone = phone;
@@ -45,22 +48,46 @@ public class student {
         this.create_at = create_at;
         this.update_at = update_at;
         this.age = age;
+        this.deleted_at = deleted_at;
+    }
+
+
+    public Student(String name, String code, String phone, String address, Date create_at, Date update_at, int age) {
+        this.name = name;
+        this.code = code;
+        this.phone = phone;
+        this.address = address;
+        this.create_at = create_at;
+        this.update_at = update_at;
+        this.age = age;
+    }
+
+    public Student(String name, String code, String phone, String address, Date create_at, Date update_at, int age, Date deleted_at) {
+        this.name = name;
+        this.code = code;
+        this.phone = phone;
+        this.address = address;
+        this.create_at = create_at;
+        this.update_at = update_at;
+        this.age = age;
+        this.deleted_at = deleted_at;
     }
 
     public void setAge(int age) {
         this.age = age;
     }
 
-    public student(String name, String code, String phone, String address, Date create_at, Date update_at) {
+    public Student(String name, String code, String phone, String address, Date create_at, Date update_at, Date deleted_at) {
         this.name = name;
         this.code = code;
         this.phone = phone;
         this.address = address;
         this.create_at = create_at;
         this.update_at = update_at;
+        this.deleted_at = deleted_at;
     }
 
-    public student() {
+    public Student() {
     }
 
     public int getId() {
@@ -119,6 +146,13 @@ public class student {
         this.update_at = update_at;
     }
 
+    public Date getDeleted_at() {
+        return deleted_at;
+    }
+
+    public void setDeleted_at(Date deleted_at) {
+        this.deleted_at = deleted_at;
+    }
 
     public int getAge() {
         return age;
@@ -126,17 +160,17 @@ public class student {
 
     @Override
     public String toString() {
-        return "student{" + "id=" + id + ", name='" + name + '\'' + ", code='" + code + '\'' + ", phone='" + phone + '\'' + ", address='" + address + '\'' + ", create_at=" + create_at + ", update_at=" + update_at + ", age=" + age + '}';
+        return "student{" + "id=" + id + ", name='" + name + '\'' + ", code='" + code + '\'' + ", phone='" + phone + '\'' + ", address='" + address + '\'' + ", create_at=" + create_at + ", update_at=" + update_at + ", deleted_at=" + deleted_at + ", age=" + age + '}';
     }
 
-    public static student input() {
+    public static Student input() {
         Scanner sc = new Scanner(System.in);
         System.out.println("Nhập name :");
         String name = sc.nextLine();
         System.out.println("Nhập code : ");
         String code = sc.nextLine();
         //Check mã code
-        Validate.checkMaCode(code);
+        code = Validate.checkMaCode(code);
         String codecheck = Validate.checkKyTuDacBiet(code);
         //////
         System.out.println("Nhập phone : ");
@@ -157,7 +191,7 @@ public class student {
             age = Integer.parseInt(sc.nextLine());
             Validate.checkAge(age);
         }
-        student students = new student(name, codecheck, phonela, address, create_at, update_at, age);
+        Student students = new Student(name, codecheck, phonela, address, create_at, update_at, age);
         return students;
     }
 }

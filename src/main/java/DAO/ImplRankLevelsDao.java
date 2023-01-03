@@ -1,10 +1,11 @@
 package DAO;
 
 import Connection_DB.ConnectionPostgres;
-import Entities.student;
+import Entities.Student;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class ImplRankLevelsDao implements IRankLevelsDao {
@@ -16,12 +17,18 @@ public class ImplRankLevelsDao implements IRankLevelsDao {
     }
 
     @Override
-    public List<student> selectAll() {
+    public List<Student> selectAll() {
         if (con != null) {
             String SQL = "SELECT * FROM student";
             LuuTru luuTru = new LuuTru();
-            List<student> list = luuTru.listStudent(SQL);
-            return list;
+            List<Student> studentList = new ArrayList<Student>();
+            List<Student> list = luuTru.listStudent(SQL);
+            for (Student students : list) {
+                if (students.getDeleted_at() == null) {
+                    studentList.add(students);
+                }
+            }
+            return studentList;
         } else {
             System.out.println("Không có kết nối với ConnectionPostgres");
         }
@@ -30,7 +37,7 @@ public class ImplRankLevelsDao implements IRankLevelsDao {
 
 
     @Override
-    public Boolean insert(student std) {
+    public Boolean insert(Student std) {
         if (con != null) {
             String SQL = "INSERT INTO student(name, code, phone, address, created_at, update_at, age) VALUES(?,?,?,?,?,?,?)";
             LuuTru luuTru = new LuuTru();
@@ -49,7 +56,7 @@ public class ImplRankLevelsDao implements IRankLevelsDao {
     }
 
     @Override
-    public Boolean update(student std) {
+    public Boolean update(Student std) {
         if (con != null) {
             String SQL = "UPDATE student SET name = ?, code = ?, phone = ?, address = ?, created_at = ?, update_at = ?, age = ? WHERE id = ?";
             LuuTru luuTru = new LuuTru();
@@ -72,9 +79,11 @@ public class ImplRankLevelsDao implements IRankLevelsDao {
     public Boolean delete(int idxoa) {
         if (con != null) {
             try {
-                String SQL = "DELETE FROM student WHERE id = ?";
+                String SQL = "UPDATE student SET deleted_at = ? WHERE id = ?";
                 PreparedStatement preparedStatement = con.prepareStatement(SQL);
-                preparedStatement.setInt(1, idxoa);
+                java.util.Date ngayxoa = new Date();
+                preparedStatement.setDate(1, new java.sql.Date(ngayxoa.getTime()));
+                preparedStatement.setInt(2, idxoa);
                 int xoatc = preparedStatement.executeUpdate();
                 if (xoatc > 0) {
                     System.out.println("Xóa thành công");
@@ -91,7 +100,7 @@ public class ImplRankLevelsDao implements IRankLevelsDao {
     }
 
     @Override
-    public student selectByID(int idtim) {
+    public Student selectByID(int idtim) {
         try {
             String SQL = "SELECT * FROM student WHERE id = ?";
             PreparedStatement statement = con.prepareStatement(SQL);
@@ -99,7 +108,7 @@ public class ImplRankLevelsDao implements IRankLevelsDao {
             ResultSet resultSet = statement.executeQuery();
 //            rank_levels rankLevels = new rank_levels();
             LuuTru luuTru = new LuuTru();
-            student studentok = luuTru.getStudent(resultSet);
+            Student studentok = luuTru.getStudent(resultSet);
             return studentok;
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
@@ -108,14 +117,14 @@ public class ImplRankLevelsDao implements IRankLevelsDao {
     }
 
     @Override
-    public student selectByCode(String macode) {
+    public Student selectByCode(String macode) {
         try {
             String SQL = "SELECT * FROM student WHERE code = ?";
             PreparedStatement statement = con.prepareStatement(SQL);
             statement.setString(1, macode);
             ResultSet resultSet = statement.executeQuery();
             LuuTru luuTru = new LuuTru();
-            student studentpl = luuTru.getStudent(resultSet);
+            Student studentpl = luuTru.getStudent(resultSet);
             return studentpl;
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
@@ -124,7 +133,7 @@ public class ImplRankLevelsDao implements IRankLevelsDao {
     }
 
     @Override
-    public List<student> selectByName(String name) {
+    public List<Student> selectByName(String name) {
         try {
             String SQL = "SELECT * FROM student WHERE name like ? ";
             PreparedStatement statement = con.prepareStatement(SQL);
@@ -132,8 +141,10 @@ public class ImplRankLevelsDao implements IRankLevelsDao {
             ResultSet resultSet = statement.executeQuery();
 //            rank_levels rankLevels = new rank_levels();
             LuuTru luuTru = new LuuTru();
-            List<student> list = luuTru.listThu(resultSet);
+            List<Student> list = luuTru.listThu(resultSet);
             return list;
+
+
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
         }
@@ -141,15 +152,15 @@ public class ImplRankLevelsDao implements IRankLevelsDao {
     }
 
     @Override
-    public List<student> selectByAddress(String address) {
-        List<student> list = new ArrayList<student>();
+    public List<Student> selectByAddress(String address) {
+        List<Student> list = new ArrayList<Student>();
         try {
             String SQL = "SELECT * FROM student WHERE address like ? ";
             PreparedStatement statement = con.prepareStatement(SQL);
             statement.setString(1, "%" + address + "%");
             ResultSet resultSet = statement.executeQuery();
             LuuTru luuTru = new LuuTru();
-            List<student> listok = luuTru.listThu(resultSet);
+            List<Student> listok = luuTru.listThu(resultSet);
             return listok;
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
@@ -158,14 +169,14 @@ public class ImplRankLevelsDao implements IRankLevelsDao {
     }
 
     @Override
-    public List<student> increaserAge() {
+    public List<Student> increaserAge() {
         if (con != null) {
             String SQL = "SELECT * FROM student ORDER BY age";
             try {
                 PreparedStatement statement = con.prepareStatement(SQL);
                 ResultSet resultSet = statement.executeQuery();
                 LuuTru luuTru = new LuuTru();
-                List<student> list = luuTru.listThu(resultSet);
+                List<Student> list = luuTru.listThu(resultSet);
                 if (list.size() == 0) {
                     System.out.println("Không tìm thấy kết quả");
                 }
@@ -181,14 +192,14 @@ public class ImplRankLevelsDao implements IRankLevelsDao {
     }
 
     @Override
-    public List<student> decreaserAge() {
+    public List<Student> decreaserAge() {
         if (con != null) {
             String SQL = "SELECT * FROM student ORDER BY age DESC";
             try {
                 PreparedStatement statement = con.prepareStatement(SQL);
                 ResultSet resultSet = statement.executeQuery();
                 LuuTru luuTru = new LuuTru();
-                List<student> list = luuTru.listThu(resultSet);
+                List<Student> list = luuTru.listThu(resultSet);
                 if (list.size() == 0) {
                     System.out.println("Không tìm thấy kết quả");
                 }
@@ -204,7 +215,7 @@ public class ImplRankLevelsDao implements IRankLevelsDao {
     }
 
     @Override
-    public List<student> selectByNameOrByAddress(String str) {
+    public List<Student> selectByNameOrByAddress(String str) {
         if (con != null) {
             String SQL = "SELECT * FROM student WHERE address like ? OR name like ?";
             try {
@@ -213,12 +224,31 @@ public class ImplRankLevelsDao implements IRankLevelsDao {
                 statement.setString(2, "%" + str + "%");
                 ResultSet resultSet = statement.executeQuery();
                 LuuTru luuTru = new LuuTru();
-                List<student> list = luuTru.listThu(resultSet);
+                List<Student> list = luuTru.listThu(resultSet);
                 return list;
             } catch (SQLException e) {
                 System.out.println("Lỗi truy vấn câu lệnh");
             }
 
+        } else {
+            System.out.println("Không có kết nối với ConnectionPostgres");
+        }
+        return null;
+    }
+
+    @Override
+    public List<Student> selectDeletedAll() {
+        if (con != null) {
+            String SQL = "SELECT * FROM student";
+            LuuTru luuTru = new LuuTru();
+            List<Student> studentList = new ArrayList<Student>();
+            List<Student> list = luuTru.listDeleteStudent(SQL);
+            for (Student students : list) {
+                if (students.getDeleted_at() != null) {
+                    studentList.add(students);
+                }
+            }
+            return studentList;
         } else {
             System.out.println("Không có kết nối với ConnectionPostgres");
         }
