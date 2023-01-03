@@ -170,8 +170,8 @@ public class Student {
         System.out.println("Nhập code : ");
         String code = sc.nextLine();
         //Check mã code
-        code = Validate.checkMaCode(code);
-        String codecheck = Validate.checkKyTuDacBiet(code);
+        code = Validate.checkCode(code);
+        String codecheck = Validate.checkCharacters(code);
         //////
         System.out.println("Nhập phone : ");
         String phone = sc.nextLine();

@@ -10,7 +10,7 @@ public class Validate {
     //Check nhập code
 
 
-    public static String checkMaCode(String code) {
+    public static String checkCode(String code) {
         ImplRankLevelsDao implRankLevelsDao = new ImplRankLevelsDao();
         Scanner sc = new Scanner(System.in);
         while (true) {
@@ -40,7 +40,7 @@ public class Validate {
 
 
     //Check mã code kí tự đặc biệt
-    public static String checkKyTuDacBiet(String macode) {
+    public static String checkCharacters(String macode) {
         Pattern pattern = Pattern.compile("^[a-zA-z0-9]+$");
         Scanner sc = new Scanner(System.in);
         while (true) {
