@@ -1,7 +1,7 @@
 package DAO;
 
 import Connection_DB.ConnectionPostgres;
-import Entities.student;
+import Entities.Student;
 
 import java.sql.Connection;
 import java.sql.Date;
@@ -18,8 +18,9 @@ public class LuuTru {
     }
 
 
-    public List<student> listStudent(String SQL) {
-        List<student> list = new ArrayList<student>();
+    public List<Student> listStudent(String SQL) {
+        List<Student> list = new ArrayList<Student>();
+        List<Student> studentList = new ArrayList<Student>();
         try {
             PreparedStatement statement = con.prepareStatement(SQL);
             ResultSet resultSet = statement.executeQuery();
@@ -32,7 +33,37 @@ public class LuuTru {
                 Date create_at = resultSet.getDate("created_at");
                 Date update_at = resultSet.getDate("update_at");
                 int age = resultSet.getInt("age");
-                student students = new student(id, name, code, phone, address, create_at, update_at, age);
+                Date deleted_at = resultSet.getDate("deleted_at");
+                Student students = new Student(id, name, code, phone, address, create_at, update_at, age, deleted_at);
+                list.add(students);
+            }
+        } catch (Exception ex) {
+            System.out.println("Lỗi không kết nối db");
+        }
+        for (Student students : list) {
+            if (students.getDeleted_at() == null) {
+                studentList.add(students);
+            }
+        }
+        return studentList;
+    }
+
+    public List<Student> listDeleteStudent(String SQL) {
+        List<Student> list = new ArrayList<Student>();
+        try {
+            PreparedStatement statement = con.prepareStatement(SQL);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                int id = resultSet.getInt("id");
+                String name = resultSet.getString("name");
+                String code = resultSet.getString("code");
+                String phone = resultSet.getString("phone");
+                String address = resultSet.getString("address");
+                Date create_at = resultSet.getDate("created_at");
+                Date update_at = resultSet.getDate("update_at");
+                int age = resultSet.getInt("age");
+                Date deleted_at = resultSet.getDate("deleted_at");
+                Student students = new Student(id, name, code, phone, address, create_at, update_at, age, deleted_at);
                 list.add(students);
             }
         } catch (Exception ex) {
@@ -42,8 +73,9 @@ public class LuuTru {
     }
 
 
-    public List<student> listThu(ResultSet resultSet) {
-        List<student> list = new ArrayList<student>();
+    public List<Student> listThu(ResultSet resultSet) {
+        List<Student> list = new ArrayList<Student>();
+        List<Student> studentList = new ArrayList<Student>();
         try {
             while (resultSet.next()) {
                 int id = resultSet.getInt("id");
@@ -54,17 +86,23 @@ public class LuuTru {
                 Date create_at = resultSet.getDate("created_at");
                 Date update_at = resultSet.getDate("update_at");
                 int age = resultSet.getInt("age");
-                student students = new student(id, name, code, phone, address, create_at, update_at, age);
+                Date deleted_at = resultSet.getDate("deleted_at");
+                Student students = new Student(id, name, code, phone, address, create_at, update_at, age, deleted_at);
                 list.add(students);
             }
         } catch (Exception ex) {
             System.out.println("Lỗi không kết nối db");
         }
-        return list;
+        for (Student students : list) {
+            if (students.getDeleted_at() == null) {
+                studentList.add(students);
+            }
+        }
+        return studentList;
     }
 
 
-    public int save(String SQL, student std) {
+    public int save(String SQL, Student std) {
         int check = 0;
         try {
             PreparedStatement preparedStatement = con.prepareStatement(SQL);
@@ -82,7 +120,7 @@ public class LuuTru {
         return check;
     }
 
-    public int update(String SQL, student std) {
+    public int update(String SQL, Student std) {
         int check = 0;
         try {
             PreparedStatement preparedStatement = con.prepareStatement(SQL);
@@ -103,8 +141,8 @@ public class LuuTru {
 
 
     //
-    public student getStudent(ResultSet resultSet) {
-        student studentget = new student();
+    public Student getStudent(ResultSet resultSet) {
+        Student studentget = new Student();
         try {
             while (resultSet.next()) {
                 studentget.setId(resultSet.getInt("id"));
@@ -115,10 +153,14 @@ public class LuuTru {
                 studentget.setCreate_at(resultSet.getDate("created_at"));
                 studentget.setUpdate_at(resultSet.getDate("update_at"));
                 studentget.setAge(resultSet.getInt("age"));
+                studentget.setDeleted_at(resultSet.getDate("deleted_at"));
             }
         } catch (Exception exception) {
             System.out.println("Lỗi xem lại");
         }
-        return studentget;
+        if (studentget.getDeleted_at() == null) {
+            return studentget;
+        }
+        return null;
     }
 }
