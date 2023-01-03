@@ -214,9 +214,6 @@ public class ImplRankLevelsDao implements IRankLevelsDao {
                 ResultSet resultSet = statement.executeQuery();
                 LuuTru luuTru = new LuuTru();
                 List<student> list = luuTru.listThu(resultSet);
-                if (list.size() == 0) {
-                    System.out.println("Không tìm thấy kết quả");
-                }
                 return list;
             } catch (SQLException e) {
                 System.out.println("Lỗi truy vấn câu lệnh");

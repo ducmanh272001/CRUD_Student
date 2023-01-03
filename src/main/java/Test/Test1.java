@@ -140,6 +140,10 @@ public class Test1 {
                     List<student> list1 = implRankLevelsDao.selectByNameOrByAddress(nametim);
                     for (student timstd : list1) {
                         System.out.println(timstd.toString());
+                        break;
+                    }
+                    if(list1.isEmpty()){
+                        System.out.println("Không tìm thấy kết quả ?");
                     }
                     break;
                 case 12:
